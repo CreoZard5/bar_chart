@@ -28,20 +28,21 @@ import java.util.ListIterator;
 public class MainActivity extends AppCompatActivity {
 
     // variable for our bar chart
-    BarChart barChart;
+    private BarChart barChart;
 
     // variable for our bar data.
-    BarData barData;
+    private BarData barData;
 
     // variable for our bar data set.
-    BarDataSet barDataSet;
+    private BarDataSet barDataSet;
 
     // array list for storing entries.
-    ArrayList barEntriesArrayList;
-    ArrayList barlablesArrayList;
-    TextView txv;
+    private ArrayList barEntriesArrayList;
+    private ArrayList barlablesArrayList;
+    private TextView txv;
+    private String lables = "Key\n";
 
-    ArrayList<Tester> test = new ArrayList<>();
+    private ArrayList<Tester> test = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     @SuppressLint("ResourceType")
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         getBarEntries();
 
         String[] mStrings = new String[barlablesArrayList.size()];
-        String lables = "Key\n";
         for (int i = 0; i < barlablesArrayList.size(); i++) {
             mStrings[i] = barlablesArrayList.get(i).toString();
             lables = lables + "bar " + i + " : " + barlablesArrayList.get(i).toString() + "\n";
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         barChart.setData(barData);
 
         // adding color to our bar data set.
-        barDataSet.setColors(ColorTemplate.LIBERTY_COLORS);
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
 
         // setting text color.
@@ -89,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
         // setting text size
         barDataSet.setValueTextSize(16f);
 
-        barDataSet.setStackLabels(mStrings);
+        barDataSet.setBarShadowColor(Color.LTGRAY);
 
-        barChart.setAccessibilityHeading(false);
+        barChart.setDrawBarShadow(true);
 
 
         barChart.getDescription().setEnabled(false);
@@ -105,8 +105,8 @@ public class MainActivity extends AppCompatActivity {
 //        if (test.size() == 0)
 //        {
         for (Tester testing : test) {
-            barEntriesArrayList.add(new BarEntry((float) counter, (float)testing.getMark()));
-            barlablesArrayList.add(testing.getName());
+            barEntriesArrayList.add(new BarEntry(counter, toPercent(testing.getMark(),100) ));
+            lables = lables + "bar " + Integer.toString(counter) + " : " + testing.getName().toString() + "\n";
             counter++;
         }
 //        }
@@ -125,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private int toPercent(int numCollected,int Total)
+    {
+        int percent = (int)((numCollected * 100.0f) / Total);
+        return percent;
+    }
 
     private void populateList() {
         Tester t1 = new Tester("Neil", 100);
